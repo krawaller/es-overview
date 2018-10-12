@@ -1,0 +1,6 @@
+{
+  "devDependencies": {},
+  "dependencies": {
+    "node-fetch": "^2.2.0"
+  }
+}
