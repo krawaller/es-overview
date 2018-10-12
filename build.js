@@ -110,7 +110,8 @@ function printGroup(name, proposals) {
   const classes = [
     'group',
     past ? 'past' : 'future',
-    name.match(current) && 'current'
+    name.match(current) && 'current',
+    name.match(current + 1) && 'near-future'
   ].filter(c => !!c).join(' ');
   return `<div class="${classes}">
     <h3>${name}</h3>
@@ -120,14 +121,22 @@ function printGroup(name, proposals) {
   </div>`;
 }
 
-function populateTemplate(template, proposals) {
-  const keys = Object.keys(proposals).sort((a, b) =>
-    a.startsWith('ES') && b.startsWith('ES') ? a > b
-    : a.startsWith('ES') ? -1
-    : b.startsWith('ES') ? 1
-    : +b[5] > +a[5]
+function sortGroups(groups) {
+  return groups.sort((a, b) =>
+    a.startsWith('ES') && b.startsWith('ES') ? a < b
+    : a.startsWith('ES') ? 1
+    : b.startsWith('ES') ? -1
+    : +b[5] < +a[5]
   );
-  return template.replace('OVERVIEWCONTENT',keys.map(key => printGroup(key, proposals[key])).join('\n'));
+}
+
+function populateTemplate(template, proposals) {
+  return template.replace(
+    'OVERVIEWCONTENT',
+    sortGroups(Object.keys(proposals))
+      .map(key => printGroup(key, proposals[key]))
+      .join('\n')
+    );
 }
 
 // /* for local testing, do this once: */
