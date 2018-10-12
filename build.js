@@ -114,5 +114,6 @@ function populateTemplate(template, proposals) {
 getSourcesFromRemote().then(sources => {
   const proposals = getProposalGroupsFromSources(sources);
   const template = fs.readFileSync('template.html').toString();
+  try { fs.mkdirSync('dist'); } catch(e) {}
   fs.writeFileSync('dist/index.html', populateTemplate(template, proposals));
 });
