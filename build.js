@@ -78,6 +78,21 @@ function parseZero(zeroSource) {
     }));
 }
 
+function parseInactive(inactiveSource) {
+  return inactiveSource
+    .replace(/ *[\n\r] */g, '') // remove all newlines so we can use . in regex
+    .match(/user-content-inactive-proposals.*?<tbody>(.*?)<\/tbody>/)[1] // isolate table body content
+    .replace(/^<tr>|<\/tr>$/g,'').split('</tr><tr>') // isolate each proposal in a string
+    .map(row => row.replace(/^<td>|<\/td>$/g,'').split('</td><td>')) // split proposals into cell contents
+    .map(proposal => ({ // make proposal into readable object
+      name: (proposal[0].match(/<a [^>]*>(.*?)<\/a>/) || [])[1] || proposal[0],
+      url: (proposal[0].match(/href=["']([^"']*)["']/) || [])[1],
+      champion: proposal[1],
+      rationale: proposal[2],
+      group: 'inactive'
+    }));
+}
+
 function sortProposals(proposals) {
   const kill = /^ *<code>["']?|^["']/;
   return proposals.sort((p1, p2) => p1.name.replace(kill, '').toLowerCase() > p2.name.replace(kill, '').toLowerCase())
@@ -87,7 +102,8 @@ function getProposalGroupsFromSources(sources) {
   return [
     ...parseZero(sources.zero),
     ...parseActive(sources.active),
-    ...parseFinished(sources.finished)
+    ...parseFinished(sources.finished),
+    ...parseInactive(sources.inactive)
   ]
   .reduce((mem, prop) => ({
     ...mem,
@@ -109,9 +125,10 @@ function printGroup(name, proposals) {
   const past = name.startsWith('ES') && parseInt(name.slice(2)) <= current;
   const classes = [
     'group',
+    name,
     past ? 'past' : 'future',
     name.match(current) && 'current',
-    name.match(current + 1) && 'near-future'
+    name.match(current + 1) && 'near-future',
   ].filter(c => !!c).join(' ');
   return `<div class="${classes}">
     <h3>${name}</h3>
@@ -123,7 +140,9 @@ function printGroup(name, proposals) {
 
 function sortGroups(groups) {
   return groups.sort((a, b) =>
-    a.startsWith('ES') && b.startsWith('ES') ? a < b
+    a === 'inactive' ? 1
+    : b === 'inactive' ? -1
+    : a.startsWith('ES') && b.startsWith('ES') ? a < b
     : a.startsWith('ES') ? 1
     : b.startsWith('ES') ? -1
     : +b[5] < +a[5]
