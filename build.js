@@ -117,7 +117,8 @@ function printProposal(proposal) {
     proposal.ascend && 'ascending',
     proposal.url && 'hasLink'
   ].filter(c => !!c).join(' ');
-  return `<div class="${classes}">${proposal.url ? `<a href="${proposal.url}" target="_blank">${proposal.name}</a>` : proposal.name}</div>`;
+  const searchText = proposal.name.replace(/<\/?code>/g, '').toLowerCase();
+  return `<div class="${classes}" data-search-text="${searchText}">${proposal.url ? `<a href="${proposal.url}" target="_blank">${proposal.name}</a>` : proposal.name}</div>`;
 }
 
 function printGroup(name, proposals) {

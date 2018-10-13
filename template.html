@@ -55,16 +55,42 @@
       background-color: cadetblue;
       border-radius: 6px;
     }
+    .filtered .proposal:not(.found) {
+      opacity: 0.2;
+    }
     body {
       margin: 0;
       padding: 0;
     }
+    .searchcontainer {
+      position: fixed;
+      z-index: 2;
+      padding: 12px;
+    }
   </style>
 </head>
 <body>
+  <div class="searchcontainer">
+    <input id="searchbar" placeholder="search">
+  </div>
   <a href="https://github.com/krawaller/es-overview"><img style="z-index: 1; position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
-  <div class="overview">
+  <div id="overview">
     OVERVIEWCONTENT
   </div>
+  <script>
+    var lastSearchResult = [];
+    var overview = document.querySelector("#overview");
+    document.querySelector('#searchbar').addEventListener('input', function(e){
+      var term = e.target.value.toLowerCase();
+      for(var i=0; i<lastSearchResult.length; i++) { lastSearchResult[i].classList.remove('found'); }
+      if (term) {
+        lastSearchResult = document.querySelectorAll('[data-search-text*="' + term + '"]');
+        for(var i=0; i<lastSearchResult.length; i++) { lastSearchResult[i].classList.add('found'); }
+        overview.classList.add('filtered');
+      } else {
+        overview.classList.remove('filtered');
+      }
+    });
+  </script>
 </body>
 </html>
