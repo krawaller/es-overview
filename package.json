@@ -2,5 +2,15 @@
   "devDependencies": {},
   "dependencies": {
     "node-fetch": "^2.2.0"
+  },
+  "bin": {
+    "build-from-disk": "./bin/build-from-disk.js",
+    "build-from-remote": "./bin/build-from-remote.js",
+    "save-sources-to-disk": "./bin/save-sources-to-disk.js"
+  },
+  "scripts": {
+    "build-from-disk": "$npm_package_bin_build_from_disk",
+    "build-from-remote": "$npm_package_bin_build_from_remote",
+    "save-sources-to-disk": "$npm_package_bin_save_sources_to_disk"
   }
 }
