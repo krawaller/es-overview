@@ -11,3 +11,27 @@ document.querySelector('#searchbar').addEventListener('input', function(e){
     overview.classList.remove('filtered');
   }
 });
+
+var modal = document.querySelector("#modal");
+var modalContent = modal.querySelector("#modalcontent");
+modal.addEventListener('click', function(e) {
+  if (!e.target.matches('a')) {
+    document.body.classList.remove('modalvisible');
+  }
+});
+document.querySelector('#overview').addEventListener('click', function(e){
+  var prop = e.target.matches('.proposal') ? e.target : e.target.closest('.proposal');
+  if (prop) {
+    var data = JSON.parse(prop.getAttribute("data-blob"));
+    modalContent.innerHTML = (
+      '<h4>' + data.name + '</h4>' + 
+      '<dl>' +
+      '<dt>Status</dt><dd>' + data.group + '</dd>' +
+      (data.author ? '<dt>Author</dt><dd>' + data.author + '</dd>' : '') +
+      (data.champion ? '<dt>Champion</dt><dd>' + data.champion + '</dd>' : '') +
+      (data.url ? '<dt>Link</dt><dd><a href="' + data.url + '" target="_blank">' + data.url + '</a></dd>' : '') +
+      '</dl>'
+    );
+    document.body.classList.add('modalvisible');
+  }
+});

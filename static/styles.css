@@ -43,6 +43,9 @@ h3 {
 .inactive {
   background-color: dimgrey;
 }
+.proposal {
+  cursor: pointer;
+}
 .proposal:hover {
   background-color: cadetblue;
   border-radius: 6px;
@@ -58,4 +61,34 @@ body {
   position: fixed;
   z-index: 2;
   padding: 12px;
+}
+
+.modalvisible .searchcontainer {
+  display: none;
+}
+
+#modal {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background-color: rgba(0,0,0,0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  padding: 20px;
+  pointer-events: none;
+  display: flex;
+}
+
+#modalcontent {
+  flex: 1;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: white;
+}
+
+.modalvisible #modal {
+  opacity: 1;
+  pointer-events: all;
 }

@@ -9,7 +9,8 @@ function printProposal(proposal) {
     proposal.url && 'hasLink'
   ].filter(c => !!c).join(' ');
   const searchText = proposal.name.replace(/<\/?code>/g, '').toLowerCase();
-  return `<div class="${classes}" data-search-text="${searchText}">${proposal.url ? `<a href="${proposal.url}" target="_blank">${proposal.name}</a>` : proposal.name}</div>`;
+  const blob = JSON.stringify(proposal);
+  return `<div class="${classes}" data-blob='${blob}' data-search-text="${searchText}">${proposal.name}</div>`;
 }
 
 function printGroup(name, proposals) {
