@@ -1,0 +1,5 @@
+[Settings]
+ID = "1de6b56a-2d08-42bb-bf36-c52b4f0775bb"
+[build]
+  publish = "dist/"
+  command = "npm run build-from-remote"
