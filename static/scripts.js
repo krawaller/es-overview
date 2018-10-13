@@ -35,3 +35,22 @@ document.querySelector('#overview').addEventListener('click', function(e){
     document.body.classList.add('modalvisible');
   }
 });
+
+var nearFuture = document.querySelector('.near-future');
+var current = document.querySelector('.current');
+var root = document.querySelector('.overview');
+
+//current.insertAdjacentHTML('beforebegin', '<div id="futuremarker">↑\A future</div>');
+
+var intersectionObserver = new IntersectionObserver(handleIntersect, {
+  root: root
+});
+intersectionObserver.observe(current);
+function handleIntersect(entries) {
+  for(var i=0; i < entries.length; i++) {
+    var entry = entries[i];
+    if (entry.target === current) {
+      document.body.classList[entry.isIntersecting ? 'add' : 'remove']('pastVisible');
+    }
+  }
+}

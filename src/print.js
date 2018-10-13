@@ -23,11 +23,14 @@ function printGroup(name, proposals) {
     name.match(current) && 'current',
     name.match(current + 1) && 'near-future',
   ].filter(c => !!c).join(' ');
-  return `<div class="${classes}">
+  return `
+  <div class="${classes}">
+    ${ name.match(current) ? '<div id="pastmarker"><span>past<br/>↓</span></div>' : '' }
     <h3>${name}</h3>
     <div class="proposals">
       ${ sortProposals(proposals).map(printProposal).join('\n') }
     </div>
+    ${ name.match(current + 1) ? '<div id="futuremarker"><span>↑<br/>future</span></div>' : '' }
   </div>`;
 }
 
