@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 const { sortGroups, sortProposals } = require('./sort');
 
 function printProposal(proposal) {
@@ -29,15 +30,18 @@ function printGroup(name, proposals) {
   </div>`;
 }
 
-const template = fs.readFileSync('template.html').toString();
+const template = fs.readFileSync(path.join(__dirname, '../static/template.html')).toString();
+const scripts = fs.readFileSync(path.join(__dirname, '../static/scripts.js')).toString();
+const styles = fs.readFileSync(path.join(__dirname, '../static/styles.css')).toString();
 
 function printTemplate(proposals) {
-  return template.replace(
-    'OVERVIEWCONTENT',
-    sortGroups(Object.keys(proposals))
-      .map(key => printGroup(key, proposals[key]))
-      .join('\n')
-    );
+  const overviewContent = sortGroups(Object.keys(proposals))
+    .map(key => printGroup(key, proposals[key]))
+    .join('\n');
+  return template
+    .replace('<div id="overview"></div>', `<div id="overview">${overviewContent}</div>`)
+    .replace('</head>', `<style>${styles}</style></head>`)
+    .replace('</body>', `<script>${scripts}</script></body>`);
 }
 
 module.exports = { printTemplate };
