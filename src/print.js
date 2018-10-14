@@ -48,11 +48,12 @@ const scripts = fs.readFileSync(path.join(__dirname, '../static/scripts.js')).to
 const styles = fs.readFileSync(path.join(__dirname, '../static/styles.css')).toString();
 
 function generateDist(proposals) {
+  try { fs.mkdirSync(path.join(__dirname, '../dist')) } catch(e) {}
   return Promise.all([
-    new Promise(resolve => fs.writeFile('dist/index.html', printTemplate(proposals), resolve)),
-    new Promise(resolve => fs.writeFile('dist/polyfill.js', polyfill, resolve)),
-    new Promise(resolve => fs.writeFile('dist/styles.css', styles, resolve)),
-    new Promise(resolve => fs.writeFile('dist/scripts.js', scripts, resolve)),
+    new Promise(resolve => fs.writeFile(path.join(__dirname, '../dist/index.html'), printTemplate(proposals), resolve)),
+    new Promise(resolve => fs.writeFile(path.join(__dirname, '../dist/polyfill.js'), polyfill, resolve)),
+    new Promise(resolve => fs.writeFile(path.join(__dirname, '../dist/styles.css'), styles, resolve)),
+    new Promise(resolve => fs.writeFile(path.join(__dirname, '../dist/scripts.js'), scripts, resolve)),
   ]);
 }
 
