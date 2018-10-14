@@ -35,17 +35,25 @@ function printGroup(name, proposals) {
 }
 
 const template = fs.readFileSync(path.join(__dirname, '../static/template.html')).toString();
-const scripts = fs.readFileSync(path.join(__dirname, '../static/scripts.js')).toString();
-const styles = fs.readFileSync(path.join(__dirname, '../static/styles.css')).toString();
 
 function printTemplate(proposals) {
   const overviewContent = sortGroups(Object.keys(proposals))
     .map(key => printGroup(key, proposals[key]))
     .join('\n');
-  return template
-    .replace('<div id="overview"></div>', `<div id="overview">${overviewContent}</div>`)
-    .replace('</head>', `<style>${styles}</style></head>`)
-    .replace('</body>', `<script>${scripts}</script></body>`);
+  return template.replace('<div id="overview"></div>', `<div id="overview">${overviewContent}</div>`);
 }
 
-module.exports = { printTemplate };
+const polyfill = fs.readFileSync(path.join(__dirname, '../node_modules/intersection-observer/intersection-observer.js'));
+const scripts = fs.readFileSync(path.join(__dirname, '../static/scripts.js')).toString();
+const styles = fs.readFileSync(path.join(__dirname, '../static/styles.css')).toString();
+
+function generateDist(proposals) {
+  return Promise.all([
+    new Promise(resolve => fs.writeFile('dist/index.html', printTemplate(proposals), resolve)),
+    new Promise(resolve => fs.writeFile('dist/polyfill.js', polyfill, resolve)),
+    new Promise(resolve => fs.writeFile('dist/styles.css', styles, resolve)),
+    new Promise(resolve => fs.writeFile('dist/scripts.js', scripts, resolve)),
+  ]);
+}
+
+module.exports = { generateDist };

@@ -1,6 +1,7 @@
 {
   "devDependencies": {},
   "dependencies": {
+    "intersection-observer": "^0.5.0",
     "node-fetch": "^2.2.0"
   },
   "bin": {
