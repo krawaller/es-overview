@@ -1,3 +1,4 @@
+const { latest } = require('./constants');
 
 function parseActiveSource(activeSource) {
   return activeSource
@@ -28,7 +29,7 @@ function parseFinishedSource(finishedSource) {
       url: (proposal[0].match(/href=["']([^"']*)["']/) || [])[1],
       author: proposal[1],
       champion: proposal[2],
-      group: `ES${proposal[4]}`
+      group: `ES${proposal[4]}${proposal[4] > latest ? ' (stage4)' : ''}`
     }));
 }
 

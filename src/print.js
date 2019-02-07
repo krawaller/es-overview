@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { sortGroups, sortProposals } = require('./sort');
+const { latest } = require('./constants');
 
 function printProposal(proposal) {
   const classes = [
@@ -14,23 +15,22 @@ function printProposal(proposal) {
 }
 
 function printGroup(name, proposals) {
-  const current = (new Date()).getFullYear();
-  const past = name.startsWith('ES') && parseInt(name.slice(2)) <= current;
+  const past = name.startsWith('ES') && parseInt(name.slice(2)) <= latest;
   const classes = [
     'group',
     name,
     past ? 'past' : 'future',
-    name.match(current) && 'current',
-    name.match(current + 1) && 'near-future',
+    name.match(latest) && 'current',
+    name.match(latest + 1) && 'near-future',
   ].filter(c => !!c).join(' ');
   return `
   <div class="${classes}">
-    ${ name.match(current) ? '<div id="pastmarker"><span>past<br/>↓</span></div>' : '' }
+    ${ name.match(latest) ? '<div id="pastmarker"><span>past<br/>↓</span></div>' : '' }
     <h3>${name}</h3>
     <div class="proposals">
       ${ sortProposals(proposals).map(printProposal).join('\n') }
     </div>
-    ${ name.match(current + 1) ? '<div id="futuremarker"><span>↑<br/>future</span></div>' : '' }
+    ${ name.match(latest + 1) ? '<div id="futuremarker"><span>↑<br/>future</span></div>' : '' }
   </div>`;
 }
 
